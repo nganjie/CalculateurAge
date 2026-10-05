@@ -22,8 +22,18 @@ public class CalculateurViewModel : BaseViewModel
     public DateTime DateNaissance
     {
         get => _dateNaissance;
-        set => SetField(ref _dateNaissance, value);
+        set
+        {
+            if (SetField(ref _dateNaissance, value))
+            {
+                OnPropertyChanged(nameof(DateFuture));
+                CalculerCommand.Rafraichir();
+            }
+        }
     }
+
+    // Vrai si la date choisie est apres aujourd hui.
+    public bool DateFuture => DateNaissance.Date > DateTime.Today;
 
     public string Resultat
     {
@@ -54,7 +64,7 @@ public class CalculateurViewModel : BaseViewModel
     {
         CalculerCommand = new RelayCommand(
             Calculer,
-            () => !string.IsNullOrWhiteSpace(Nom));
+            () => !string.IsNullOrWhiteSpace(Nom) && !DateFuture);
         EffacerCommand = new RelayCommand(Effacer);
     }
 

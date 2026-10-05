@@ -11,6 +11,9 @@
                    Placeholder="Votre nom" />
             <Label Text="Date de naissance" FontSize="16" />
             <DatePicker Date="{Binding DateNaissance}" />
+            <Label Text="La date de naissance ne peut pas etre dans le futur"
+                   TextColor="Red"
+                   IsVisible="{Binding DateFuture}" />
             <Button Text="Calculer"
                     Command="{Binding CalculerCommand}" />
             <Button Text="Effacer"
