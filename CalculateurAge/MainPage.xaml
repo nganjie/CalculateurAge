@@ -23,6 +23,8 @@
             <Label Text="{Binding Statut}" FontSize="18"
                    FontAttributes="Bold"
                    IsVisible="{Binding ResultatVisible}" />
+            <Label Text="{Binding ProchainAnniversaire}" FontSize="16"
+                   IsVisible="{Binding ResultatVisible}" />
         </VerticalStackLayout>
     </ScrollView>
 
