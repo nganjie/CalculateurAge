@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+
 namespace CalculateurAge.ViewModels;
 
 // Contient l ETAT de l ecran et les ACTIONS possibles.
@@ -62,11 +64,18 @@ public class CalculateurViewModel : BaseViewModel
         set => SetField(ref _prochainAnniversaire, value);
     }
 
+    // Historique des calculs : ObservableCollection previent
+    // la vue a chaque ajout ou suppression.
+    public ObservableCollection<string> Historique { get; } = new();
+
     // Liee a Button.Command dans le XAML.
     public RelayCommand CalculerCommand { get; }
 
     // Remet tous les champs a zero.
     public RelayCommand EffacerCommand { get; }
+
+    // Vide la liste des calculs precedents.
+    public RelayCommand ViderHistoriqueCommand { get; }
 
     public CalculateurViewModel()
     {
@@ -74,6 +83,8 @@ public class CalculateurViewModel : BaseViewModel
             Calculer,
             () => !string.IsNullOrWhiteSpace(Nom) && !DateFuture);
         EffacerCommand = new RelayCommand(Effacer);
+        ViderHistoriqueCommand = new RelayCommand(
+            () => Historique.Clear());
     }
 
     // La logique metier : aucun controle d interface ici.
@@ -86,6 +97,8 @@ public class CalculateurViewModel : BaseViewModel
 
         Resultat = $"{Nom}, vous avez {age} ans";
         Statut = age >= 18 ? "Majeur" : "Mineur";
+        Historique.Insert(0,
+            $"{Nom} - {DateNaissance:dd/MM/yyyy} - {age} ans ({Statut})");
 
         // L anniversaire de cette annee est deja passe (ou c est
         // aujourd hui) : le prochain tombe a age + 1 ans.
